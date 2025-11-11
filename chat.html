@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FishGPT | Chat Conversacional</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #e6f7ff; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .nav { margin-bottom: 25px; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        .nav a { margin-right: 20px; text-decoration: none; color: #0056b3; font-weight: bold; font-size: 1.1em; }
+        .nav a:hover { color: #007bff; }
+        
+        .chat-box { height: 450px; overflow-y: scroll; border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 8px; background-color: #f9f9f9; }
+        
+        .message-user { text-align: right; margin-bottom: 10px; }
+        .message-ai { text-align: left; margin-bottom: 10px; }
+        
+        .user-bubble { background-color: #DCF8C6; padding: 10px 15px; border-radius: 15px 15px 0 15px; display: inline-block; max-width: 80%; text-align: left; }
+        .ai-bubble { background-color: #EAEAEA; padding: 10px 15px; border-radius: 15px 15px 15px 0; display: inline-block; max-width: 80%; text-align: left; }
+
+        input[type="text"] { width: 80%; padding: 12px; margin-right: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 1em; }
+        button { padding: 12px 18px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 1em; transition: background-color 0.3s; }
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="/">🐟 Busca Estruturada</a>
+            <a href="/chat">💬 Chat com IA</a>
+            <a href="/reset_chat" style="color: #dc3545; float: right;">🔄 Iniciar Novo Chat</a>
+        </div>
+        
+        <h1>💬 FishGPT | Converse com o Especialista</h1>
+        
+        <div class="chat-box">
+            {% for message in history %}
+                {% if message.role == 'user' %}
+                    <div class="message-user">
+                        <span class="user-bubble">{{ message.text }}</span>
+                    </div>
+                {% else %}
+                    <div class="message-ai">
+                        <span class="ai-bubble">{{ message.text | safe }}</span> 
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% if not history %}
+                <div class="message-ai"><span class="ai-bubble">Olá! Eu sou o FishGPT. Sou um assistente de pesca especializado. Qual sua dúvida sobre regulamentação, iscas, ou onde encontrar um peixe no Brasil?</span></div>
+            {% endif %}
+        </div>
+
+        <form method="POST" action="/chat">
+            <input type="text" name="message" placeholder="Pergunte algo sobre pesca..." required>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+</body>
+</html>

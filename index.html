@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FishGPT | Busca Estruturada</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #e6f7ff; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .nav { margin-bottom: 25px; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        .nav a { margin-right: 20px; text-decoration: none; color: #0056b3; font-weight: bold; font-size: 1.1em; }
+        .nav a:hover { color: #007bff; }
+        
+        input[type="text"] { width: 70%; padding: 12px; margin-right: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 1em; }
+        button { padding: 12px 18px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 1em; transition: background-color 0.3s; }
+        button:hover { background-color: #0056b3; }
+        
+        .image-display { text-align: center; margin-bottom: 20px; }
+        .image-display img { max-width: 100%; height: auto; border-radius: 8px; border: 3px solid #007bff; }
+        
+        .resultado { margin-top: 25px; padding: 20px; border: 1px solid #007bff; border-radius: 8px; background-color: #f0f8ff; white-space: pre-wrap; }
+        .detalhes-btn { background-color: #28a745; margin-top: 15px; }
+        .detalhes-btn:hover { background-color: #1e7e34; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav">
+            <a href="/">🐟 Busca Estruturada</a>
+            <a href="/chat">💬 Chat com IA</a>
+        </div>
+        
+        <h1>🎣 FishGPT | Busca Estruturada</h1>
+        
+        <form method="POST" action="/">
+            <input type="text" name="peixe" placeholder="Digite o nome do peixe (ex: Tucunaré, Robalo)" required value="{{ peixe_nome if peixe_nome else '' }}">
+            <button type="submit" name="action" value="buscar_basico">Buscar Informações</button>
+        </form>
+
+        {% if image_url %}
+            <div class="image-display">
+                <img src="{{ image_url }}" alt="Imagem de {{ peixe_nome }}">
+            </div>
+        {% endif %}
+
+        {% if info %}
+            <div class="resultado">
+                <h2>Informações Encontradas para {{ peixe_nome }}:</h2>
+                {{ info | safe }}
+            </div>
+            
+            {% if peixe_nome and 'VARAS/EQUIPAMENTO' not in info %}
+            <form method="POST" action="/" style="margin-top: 10px;">
+                <input type="hidden" name="peixe" value="{{ peixe_nome }}">
+                <button type="submit" name="action" value="buscar_detalhes" class="detalhes-btn">Ver Dicas de Pesca Detalhadas</button>
+            </form>
+            {% endif %}
+
+        {% endif %}
+    </div>
+</body>
+</html>
